@@ -2,7 +2,7 @@
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2022",
-    "lib": ["ES2023"],
+    "lib": ["DOM", "ES2023"],  // ✅ Lägg till "DOM" för att JSX och fetch ska fungera
     "module": "ESNext",
     "skipLibCheck": true,
 
@@ -13,6 +13,9 @@
     "moduleDetection": "force",
     "noEmit": true,
 
+    /* React & JSX */
+    "jsx": "react-jsx", // ✅ Lägg till detta för att JSX ska fungera
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
@@ -20,5 +23,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["src"]  // ✅ Se till att hela koden inkluderas
 }

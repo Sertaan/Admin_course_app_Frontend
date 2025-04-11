@@ -1,55 +1,64 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";  // Importera useNavigate
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(location.search);
+    const query = queryParams.get('logout');
 
-    const handleLogin = async () => {
-
-        try {
-            const response = await fetch("http://localhost:8080/login", {
+    if (query=="true") {
+        const handleLogout = async () => {
+            const response = await fetch("http://localhost:8080/logout-custom", {
                 method: "POST",
-                credentials: "include", // 🧠 viktigt för att spara session-cookie
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ username, password })
+                }
             });
 
             if (!response.ok) {
-                throw new Error("Felaktiga inloggningsuppgifter!");
+                alert("Felaktiga utloggning");
+                return;
             }
 
-            console.log("Inloggning lyckades!");
-        } catch (err) {
-            alert('error');
+            console.log("Utloggningen lyckades!");
+        };
+        handleLogout();
+
+    }
+
+    const handleLogin = async () => {
+        const response = await fetch("http://localhost:8080/login", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        if (!response.ok) {
+            alert("Felaktiga inloggningsuppgifter!");
+            return;
         }
+
+        console.log("Inloggning lyckades!");
+        navigate('/dashboard');
     };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-[#F4EDE8]">
             {/* Navbar */}
-            <nav className="w-full bg-[#3B4E6B] text-white p-4 flex justify-between items-center shadow-md">
-                <h1 className="text-xl font-bold">Kursly</h1>
-                <div className="flex space-x-4">
-                    <a href="#" className="hover:underline">Kurser</a>
-                    <a href="#" className="hover:underline">Om oss</a>
-                    <input
-                        type="text"
-                        placeholder="söker"
-                        className="p-2 rounded text-black focus:outline-none focus:ring-2 focus:ring-[#D6B8A8]"
-                    />
-                    <button className="bg-white text-[#3B4E6B] px-3 py-1 rounded hover:bg-gray-200 transition">
-                        Sök
-                    </button>
-                </div>
-            </nav>
+            <nav className="w-full bg-[#3B4E6B] text-white p-4 shadow-md">
+                <h1 className="text-xl font-bold text-center">Kursly</h1>
+        </nav>
 
-            {/* Main Content */}
-            <div className="flex items-center justify-center w-full max-w-4xl p-6 space-x-8">
-                {/* Image */}
+    {/* Main Content */}
 
-                {/* Login Form */}
+    <div className="flex items-center justify-center w-full max-w-4xl p-6 space-x-8">
+        {/* Login Form */}
                 <div className="w-1/2 text-center bg-white p-6 rounded-xl shadow-lg">
                     <h2 className="text-2xl font-bold text-[#3B4E6B] mb-4">
                         Logga in för att ta del av våra kurser!
@@ -73,36 +82,9 @@ const LoginPage = () => {
                         Logga in
                     </button>
 
-                    <div className="mt-4 text-[#3B4E6B]">
-                        <hr className="border-t-2 border-gray-400 w-full mb-2" />
-                        <p>Inget konto?</p>
-                        <button className="mt-2 bg-[#3B4E6B] text-white px-4 py-2 rounded-lg hover:bg-[#2A3A55] transition">
-                            Registrera
-                        </button>
-                    </div>
                 </div>
-            </div>
-
-            {/* Footer */}
-            <footer className="w-full bg-[#D6B8A8] p-6 mt-8 text-center text-sm">
-                <div className="flex justify-between max-w-4xl mx-auto">
-                    <div>
-                        <h3 className="font-bold">Kontakt</h3>
-                        <p>info@kursly.se</p>
-                        <p>070 123 456 78</p>
-                    </div>
-                    <div>
-                        <h3 className="font-bold">Kurser</h3>
-
-                        <a href="/it-kurser" className="text-blue-600 hover:underline">IT</a>
-                        <p>Samhälle</p>
-                        <p>Musik</p>
-                        <p>Språk</p>
-                    </div>
                 </div>
-                <p className="mt-4">&copy; 2025 Kursly All Rights Reserved</p>
-            </footer>
-        </div>
+                </div>
     );
 };
 
